@@ -8,17 +8,22 @@
   <title>Weaver Student Portal</title>
   <!-- Security: Content Security Policy (CSP) to prevent XSS -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; frame-src 'self' https://test.weaver.edu.vn https://*.weaver.edu.vn; script-src 'self' 'unsafe-inline' https://apis.google.com https://*.firebaseio.com https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://lh3.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://firebasestorage.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app;">
+    content="default-src 'self'; frame-src 'self' https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com; script-src 'self' 'unsafe-inline' https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://* http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; connect-src 'self' http://127.0.0.1:5001 http://localhost:5001 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net;">
   <!-- Font Inter for remote layout -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/assets/index-DA6BQDCQ.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-DmkN4SF3.js">
-  <link rel="modulepreload" crossorigin href="/assets/firebase-guMabOSz.js">
-  <link rel="modulepreload" crossorigin href="/assets/ui-DRli81Cb.js">
-  <link rel="modulepreload" crossorigin href="/assets/charts-u3K-oXgU.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-KJC5Do6p.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Google API Client & Identity Services script setups -->
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script type="module" crossorigin src="/assets/index-By2m5mo4.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-CStxOEcH.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase-R9R-YkCU.js">
+  <link rel="modulepreload" crossorigin href="/assets/ui-DDqX_Viw.js">
+  <link rel="modulepreload" crossorigin href="/assets/charts-PcluzSfx.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-B26Bko2D.css">
 </head>
 
 <body>
