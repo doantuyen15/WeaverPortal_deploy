@@ -7,8 +7,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Weaver Student Portal</title>
   <!-- Security: Content Security Policy (CSP) to prevent XSS -->
+  <!--
+    Faye Voice additions (per src/features/fayeVoice + voice-service/):
+      - script-src  *.daily.co     → @pipecat-ai/small-webrtc-transport pulls in
+                                     @daily-co/daily-js which fetches a remote
+                                     "call object bundle" from c.daily.co at runtime.
+                                     No SDK opt-out exists. Sentry telemetry from the
+                                     same bundle stays blocked (separate domain).
+      - script-src  'unsafe-eval'  → Daily's call-machine bundle uses eval() / new
+                                     Function() internally. Without 'unsafe-eval'
+                                     the bundle loads but fails to evaluate.
+                                     Tradeoff: weakens XSS posture (combined with
+                                     existing 'unsafe-inline'). Scoped to this app
+                                     only because Faye Voice can't function without
+                                     it. Revisit if Daily ever ships a CSP-safe
+                                     build (WASM-based or eval-free).
+      - connect-src *.daily.co     → Daily's signaling + telemetry endpoints.
+      - connect-src *.run.app      → voice-service/ Cloud Run revisions (prod).
+      - media-src   blob:          → Pipecat audio playback may surface tracks as
+                                     blob URLs via MediaStream.
+      - worker-src 'self' blob:    → Daily-js uses Web Workers, some via blob:.
+      - script-src  blob:          → Daily injects AudioWorklets from blob URLs.
+                                     `script-src-elem` fallback uses `script-src`
+                                     so this directive must list blob: too.
+  -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com; script-src 'self' 'unsafe-inline' https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://* http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io;">
+    content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://*.daily.co; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://* http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.daily.co wss://*.daily.co https://*.run.app wss://*.run.app;">
   <!-- Font Inter for remote layout -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,12 +42,12 @@
   <!-- Google API Client & Identity Services script setups -->
   <script src="https://apis.google.com/js/api.js" async defer></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script type="module" crossorigin src="/assets/index-C1YlUiSu.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-YpSgnp0r.js">
+  <script type="module" crossorigin src="/assets/index-D78qZNLv.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-lt_v5G8U.js">
   <link rel="modulepreload" crossorigin href="/assets/firebase-CtaTifm1.js">
-  <link rel="modulepreload" crossorigin href="/assets/ui-C54co6Wu.js">
-  <link rel="modulepreload" crossorigin href="/assets/charts-CdHxMgug.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-DpDsuF-v.css">
+  <link rel="modulepreload" crossorigin href="/assets/ui-CagguDNt.js">
+  <link rel="modulepreload" crossorigin href="/assets/charts-CHyGYC1N.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-CKvjj-if.css">
 </head>
 
 <body>
