@@ -44,9 +44,26 @@
                                      governs prod on GitHub Pages too). Kept exact, not a
                                      wildcard, so Daily's own bundled Sentry (different org
                                      host) stays blocked per the note above.
+
+    Dictation YouTube player (per src/features/dictation + dictationReview):
+      - script-src  www.youtube.com → core/youtubeIframeLoader.js injects
+                                     <script src="https://www.youtube.com/iframe_api">
+                                     into THIS document. `*.google.com` does NOT
+                                     cover youtube.com, so without this the API
+                                     script is refused and no YT.Player is ever built.
+      - frame-src   www.youtube.com → the embed iframe useSegmentPlayer.js mounts
+                                     (https://www.youtube.com/embed/<id>). Without it
+                                     the player container renders a flat black box
+                                     (bg-black) with no iframe. youtube-nocookie.com is
+                                     listed too so a future privacy-mode switch works.
+                                     (Resources loaded INSIDE the cross-origin iframe —
+                                     player JS, *.googlevideo.com media — are governed by
+                                     the iframe's own origin, not this parent CSP, so no
+                                     connect-src/media-src changes are needed.) This meta
+                                     CSP ships in dist/index.html, so it governs prod too.
   -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://*.daily.co; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://* http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 http://localhost:5201 http://localhost:9281 http://localhost:8281 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.daily.co wss://*.daily.co https://*.run.app wss://*.run.app https://*.fly.dev wss://*.fly.dev https://o4511446009184256.ingest.us.sentry.io;">
+    content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.youtube.com https://www.youtube-nocookie.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://*.daily.co https://www.youtube.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://* http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 http://localhost:5201 http://localhost:9281 http://localhost:8281 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.daily.co wss://*.daily.co https://*.run.app wss://*.run.app https://*.fly.dev wss://*.fly.dev https://o4511446009184256.ingest.us.sentry.io;">
   <!-- Font Inter for remote layout -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,12 +73,12 @@
   <!-- Google API Client & Identity Services script setups -->
   <script src="https://apis.google.com/js/api.js" async defer></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script type="module" crossorigin src="/assets/index-C3zGxV9n.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-CrfBAgJu.js">
-  <link rel="modulepreload" crossorigin href="/assets/firebase-CaG90Edb.js">
-  <link rel="modulepreload" crossorigin href="/assets/ui-BaOtwGMM.js">
-  <link rel="modulepreload" crossorigin href="/assets/charts-D4akYNhu.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-2nt6Nr1a.css">
+  <script type="module" crossorigin src="/assets/index-CADsRCZX.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-Co-E6-Ww.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase-D6fGxADk.js">
+  <link rel="modulepreload" crossorigin href="/assets/ui-aXAZTXf9.js">
+  <link rel="modulepreload" crossorigin href="/assets/charts-sTr56rWO.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-B1yRh_a-.css">
 </head>
 
 <body>
