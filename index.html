@@ -61,6 +61,19 @@
                                      the iframe's own origin, not this parent CSP, so no
                                      connect-src/media-src changes are needed.) This meta
                                      CSP ships in dist/index.html, so it governs prod too.
+
+    LAN / phone testing — do NOT edit this policy for it:
+      The emulator origins below are literal `http://localhost:<port>`, which is
+      right for the PC but breaks a phone on the LAN: src/lib/firebase.js dials
+      the emulators at window.location.hostname, so a page served from
+      http://192.168.x.x:5173 dials http://192.168.x.x:9099 — a different PORT
+      than the page origin, so `'self'` doesn't cover it and it isn't listed.
+      Every Firebase call is then CSP-blocked and surfaces as
+      `auth/network-request-failed` (looks like a firewall/emulator fault; isn't).
+      The fix is the DEV-ONLY `lanDevCsp()` plugin in vite.config.js, which
+      injects this machine's IPv4 addresses into the dev server's HTML only
+      (`apply: 'serve'` ⇒ dist/ is byte-identical). Never hardcode a LAN address
+      here — this meta CSP is what gh-pages serves to real students.
   -->
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.youtube.com https://www.youtube-nocookie.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://*.daily.co https://www.youtube.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: https://* http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 http://localhost:5201 http://localhost:9281 http://localhost:8281 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.daily.co wss://*.daily.co https://*.run.app wss://*.run.app https://*.fly.dev wss://*.fly.dev https://o4511446009184256.ingest.us.sentry.io;">
@@ -73,12 +86,12 @@
   <!-- Google API Client & Identity Services script setups -->
   <script src="https://apis.google.com/js/api.js" async defer></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script type="module" crossorigin src="/assets/index-C2aiRLMs.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-DOqEu3qh.js">
-  <link rel="modulepreload" crossorigin href="/assets/firebase-Djlj3Yo0.js">
-  <link rel="modulepreload" crossorigin href="/assets/ui-CpcmfHxC.js">
-  <link rel="modulepreload" crossorigin href="/assets/charts-39xv2-Hc.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-BSLqisIG.css">
+  <script type="module" crossorigin src="/assets/index-DpAbmLqL.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-CQJRFmyG.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase-1_aDcOFe.js">
+  <link rel="modulepreload" crossorigin href="/assets/ui-baBrJ5El.js">
+  <link rel="modulepreload" crossorigin href="/assets/charts-eAu5EHoz.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-CGX6wsv6.css">
 </head>
 
 <body>
