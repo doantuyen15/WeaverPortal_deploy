@@ -1,0 +1,1 @@
+function u(e){if(!e)return null;const n=e.startedAtMs,t=e.durationSec;if(typeof n!="number"||!Number.isFinite(n)||typeof t!="number"||!Number.isFinite(t)||t<=0)return null;const r=typeof e.extendedSec=="number"&&Number.isFinite(e.extendedSec)?Math.max(0,e.extendedSec):0;return n+(t+r)*1e3}function d(e,n){return{sectionDeadlineMs:u(e),serverNow:n??null}}export{u as c,d as u};
