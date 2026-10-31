@@ -8,31 +8,10 @@
   <title>Weaver Student Portal</title>
   <!-- Security: Content Security Policy (CSP) to prevent XSS -->
   <!--
-    Faye Voice additions (per src/features/fayeVoice + voice-service/):
-      - script-src  *.daily.co     → @pipecat-ai/small-webrtc-transport pulls in
-                                     @daily-co/daily-js which fetches a remote
-                                     "call object bundle" from c.daily.co at runtime.
-                                     No SDK opt-out exists. Sentry telemetry from the
-                                     same bundle stays blocked (separate domain).
-      - script-src  'unsafe-eval'  → Daily's call-machine bundle uses eval() / new
-                                     Function() internally. Without 'unsafe-eval'
-                                     the bundle loads but fails to evaluate.
-                                     Tradeoff: weakens XSS posture (combined with
-                                     existing 'unsafe-inline'). Scoped to this app
-                                     only because Faye Voice can't function without
-                                     it. Revisit if Daily ever ships a CSP-safe
-                                     build (WASM-based or eval-free).
-      - connect-src *.daily.co     → Daily's signaling + telemetry endpoints.
-      - connect-src *.fly.dev      → voice-service/ Fly.io app (prod).
-                                     `*.run.app` is kept for now in case we
-                                     ever spin Cloud Run back up for diagnostics,
-                                     but the active prod URL is *.fly.dev.
-      - media-src   blob:          → Pipecat audio playback may surface tracks as
-                                     blob URLs via MediaStream.
-      - worker-src 'self' blob:    → Daily-js uses Web Workers, some via blob:.
-      - script-src  blob:          → Daily injects AudioWorklets from blob URLs.
-                                     `script-src-elem` fallback uses `script-src`
-                                     so this directive must list blob: too.
+    Faye Voice was retired 2026-11-01 and took *.daily.co and *.fly.dev with it.
+    'unsafe-eval' and blob: in script-src arrived for Daily's call bundle. Nothing in
+    src/ calls eval, but they stay until Google sign-in and the YouTube player are
+    proven clean without them.
 
     Sentry (crash detection, added 2026-06-16):
       - connect-src o4511446009184256.ingest.us.sentry.io
@@ -42,8 +21,7 @@
                                      silently CSP-blocked → Portal telemetry is DOA (this
                                      meta CSP ships in the built dist/index.html, so it
                                      governs prod on GitHub Pages too). Kept exact, not a
-                                     wildcard, so Daily's own bundled Sentry (different org
-                                     host) stays blocked per the note above.
+                                     wildcard.
 
     Dictation YouTube player (per src/features/dictation + dictationReview):
       - script-src  www.youtube.com → core/youtubeIframeLoader.js injects
@@ -76,7 +54,7 @@
       here — this meta CSP is what gh-pages serves to real students.
   -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.youtube.com https://www.youtube-nocookie.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://*.daily.co https://www.youtube.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: blob: https://* http://localhost:9190 http://localhost:9381 http://127.0.0.1:9190 http://127.0.0.1:9381 http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 http://localhost:5201 http://localhost:9281 http://localhost:8281 http://localhost:9190 http://localhost:9381 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.daily.co wss://*.daily.co https://*.run.app wss://*.run.app https://*.fly.dev wss://*.fly.dev https://o4511446009184256.ingest.us.sentry.io;">
+    content="default-src 'self'; frame-src 'self' http://localhost:3001 https://test.weaver.edu.vn https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.youtube.com https://www.youtube-nocookie.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://www.youtube.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: blob: https://* http://localhost:9190 http://localhost:9381 http://127.0.0.1:9190 http://127.0.0.1:9381 http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 http://localhost:5201 http://localhost:9281 http://localhost:8281 http://localhost:9190 http://localhost:9381 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.run.app wss://*.run.app https://o4511446009184256.ingest.us.sentry.io;">
   <!-- Flashcard/vocab-drill audio lives on a public GCS bucket and is fetched by an
        <audio> element on first tap. Warming DNS + TLS here removes the cold-connect
        half of that latency on mobile, where it dominates. NO `crossorigin`: media
@@ -92,12 +70,12 @@
   <!-- Google API Client & Identity Services script setups -->
   <script src="https://apis.google.com/js/api.js" async defer></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script type="module" crossorigin src="/assets/index-CWxixqju.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-DV2jqBMH.js">
+  <script type="module" crossorigin src="/assets/index-D3MzGlxb.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-BHOEddoC.js">
   <link rel="modulepreload" crossorigin href="/assets/firebase-BeOekpNF.js">
-  <link rel="modulepreload" crossorigin href="/assets/ui-CxXUv_QU.js">
-  <link rel="modulepreload" crossorigin href="/assets/charts-DYf7DxAo.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-DypdOn1g.css">
+  <link rel="modulepreload" crossorigin href="/assets/ui-CWVigqWF.js">
+  <link rel="modulepreload" crossorigin href="/assets/charts-zKzPyn8u.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-nE11LMOW.css">
 </head>
 
 <body>
