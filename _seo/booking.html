@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#F97316" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Đặt lịch tư vấn — Weaver English</title>
+  <meta name="description" content="Chọn lịch tư vấn phù hợp, Weaver kết nối với bạn qua Zalo để cùng xây lộ trình luyện IELTS của riêng bạn." />
+  <!-- Link previews (Zalo, Messenger, Slack…). Crawlers don't run JS, so these must be
+       static and the image URL absolute. Icons are generated from
+       src/assets/weaver-logo-brand.png (the WeaverMark asset); og-image.png is the
+       Library skill tiles (L/R/W/S + Vocabulary + Dictation) rendered at 1200x630. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Weaver English" />
+  <meta property="og:title" content="Đặt lịch tư vấn — Weaver English" />
+  <meta property="og:description" content="Chọn lịch tư vấn phù hợp, Weaver kết nối với bạn qua Zalo để cùng xây lộ trình luyện IELTS của riêng bạn." />
+  <meta property="og:url" content="https://portal.weaver.edu.vn/booking" />
+  <meta property="og:image" content="https://portal.weaver.edu.vn/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Weaver English" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://portal.weaver.edu.vn/og-image.png" />
+  <!-- Security: Content Security Policy (CSP) to prevent XSS -->
+  <!--
+    Faye Voice was retired 2026-11-01 and took *.daily.co and *.fly.dev with it.
+    'unsafe-eval' and blob: in script-src arrived for Daily's call bundle. Nothing in
+    src/ calls eval, but they stay until Google sign-in and the YouTube player are
+    proven clean without them.
+
+    Sentry (crash detection, added 2026-06-16):
+      - connect-src o4511446009184256.ingest.us.sentry.io
+                                   → @sentry/react envelope POSTs (tag app=weaverportal).
+                                     EXACT host, shared by all 3 Weaver Sentry projects
+                                     (same org, us region). WITHOUT it every envelope is
+                                     silently CSP-blocked → Portal telemetry is DOA (this
+                                     meta CSP ships in the built dist/index.html, so it
+                                     governs prod on GitHub Pages too). Kept exact, not a
+                                     wildcard.
+
+    Dictation YouTube player (per src/features/dictation + dictationReview):
+      - script-src  www.youtube.com → core/youtubeIframeLoader.js injects
+                                     <script src="https://www.youtube.com/iframe_api">
+                                     into THIS document. `*.google.com` does NOT
+                                     cover youtube.com, so without this the API
+                                     script is refused and no YT.Player is ever built.
+      - frame-src   www.youtube.com → the embed iframe useSegmentPlayer.js mounts
+                                     (https://www.youtube.com/embed/<id>). Without it
+                                     the player container renders a flat black box
+                                     (bg-black) with no iframe. youtube-nocookie.com is
+                                     listed too so a future privacy-mode switch works.
+                                     (Resources loaded INSIDE the cross-origin iframe —
+                                     player JS, *.googlevideo.com media — are governed by
+                                     the iframe's own origin, not this parent CSP, so no
+                                     connect-src/media-src changes are needed.) This meta
+                                     CSP ships in dist/index.html, so it governs prod too.
+
+    LAN / phone testing — do NOT edit this policy for it:
+      The emulator origins below are literal `http://localhost:<port>`, which is
+      right for the PC but breaks a phone on the LAN: src/lib/firebase.js dials
+      the emulators at window.location.hostname, so a page served from
+      http://192.168.x.x:5173 dials http://192.168.x.x:9099 — a different PORT
+      than the page origin, so `'self'` doesn't cover it and it isn't listed.
+      Every Firebase call is then CSP-blocked and surfaces as
+      `auth/network-request-failed` (looks like a firewall/emulator fault; isn't).
+      The fix is the DEV-ONLY `lanDevCsp()` plugin in vite.config.js, which
+      injects this machine's IPv4 addresses into the dev server's HTML only
+      (`apply: 'serve'` ⇒ dist/ is byte-identical). Never hardcode a LAN address
+      here — this meta CSP is what gh-pages serves to real students.
+  -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; frame-src 'self' http://localhost:9099 http://localhost:9281 https://*.weaver.edu.vn https://*.firebaseapp.com https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.youtube.com https://www.youtube-nocookie.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://www.gstatic.com http://*.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.firebasedatabase.app https://www.youtube.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net https://p.typekit.net data:; img-src 'self' data: blob: https://* http://localhost:9190 http://localhost:9381 http://127.0.0.1:9190 http://127.0.0.1:9381 http://*.google.com http://*.gstatic.com https://*.googleusercontent.com https://ui-avatars.com https://grainy-gradients.vercel.app https://www.googletagmanager.com https://*.google.com https://*.gstatic.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.googleapis.com;     connect-src 'self' http://localhost:5001 http://localhost:9099 http://localhost:8080 http://localhost:9000 http://localhost:5201 http://localhost:9281 http://localhost:8281 http://localhost:9190 http://localhost:9381 https://*.google.com https://*.googleapis.com http://*.google.com http://*.googleapis.com https://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebaseio.com wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.cloudfunctions.net https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.stats.g.doubleclick.net https://*.algolia.net https://*.algolianet.com https://*.algolia.io https://*.run.app wss://*.run.app https://o4511446009184256.ingest.us.sentry.io;">
+  <!-- Flashcard/vocab-drill audio lives on a public GCS bucket and is fetched by an
+       <audio> element on first tap. Warming DNS + TLS here removes the cold-connect
+       half of that latency on mobile, where it dominates. NO `crossorigin`: media
+       element loads are no-CORS, and an anonymous-CORS preconnect opens a socket
+       they cannot reuse. -->
+  <link rel="preconnect" href="https://storage.googleapis.com">
+  <!-- Font Inter for remote layout -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Google+Sans+Flex:wght@1..1000&family=Inter:wght@400;500;600;700&family=Kapakana&family=Lexend:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500..800;1,500..800&family=Roboto:wght@300;400;500;700;900&display=swap"
+    rel="stylesheet">
+  <!-- Google API Client & Identity Services script setups -->
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Google's site name + logo for this host (WebSite + Organization). Data, not script:
+       the CSP does not apply to application/ld+json. Indexable pages: src/seo/publicPages.js. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "name": "Weaver English", "alternateName": ["Weaver", "Weaver Portal"], "url": "https://portal.weaver.edu.vn/" },
+      { "@type": "Organization", "name": "Weaver English", "url": "https://portal.weaver.edu.vn/", "logo": "https://portal.weaver.edu.vn/icon-512.png" }
+    ]
+  }
+  </script>
+  <script type="module" crossorigin src="/assets/index-DCy0JgVl.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-D0hMmdxo.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase-DGtbQNg4.js">
+  <link rel="modulepreload" crossorigin href="/assets/ui-D2GxZie6.js">
+  <link rel="modulepreload" crossorigin href="/assets/charts-BoqUDN2r.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-CA8i5VZz.css">
+  <link rel="canonical" href="https://portal.weaver.edu.vn/booking" />
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>

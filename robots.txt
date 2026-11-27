@@ -1,0 +1,6 @@
+# Indexable pages are src/seo/publicPages.js; everything else carries a runtime noindex.
+# Nothing is Disallowed: a blocked URL cannot be crawled, so Google would never see its noindex.
+User-agent: *
+Allow: /
+
+Sitemap: https://portal.weaver.edu.vn/sitemap.xml
